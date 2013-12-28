@@ -37,12 +37,12 @@ import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.animation.ValueAnimator.AnimatorUpdateListener;
 
 /**
- * A {@link BaseAdapterDecorator} class that provides animations to the adding of items in the given {@link BaseAdapter}
- * .
+ * A {@link BaseAdapterDecorator} class that provides animations to the adding and dismissal of items in the given
+ * {@link BaseAdapter} .
  */
-public class AnimateShowAdapter<T> extends BaseAdapterDecorator {
+public class AnimateAdapter<T> extends AnimateDismissAdapter<T> {
 
-	private OnShowCallback mCallback;
+	private OnAnimateCallback mCallback;
 
 	private List<Integer> animatePositions;
 
@@ -50,11 +50,11 @@ public class AnimateShowAdapter<T> extends BaseAdapterDecorator {
 	 * Create a new AnimateShowAdapter based on the given {@link BaseAdapter} .
 	 * 
 	 * @param callback
-	 *            The {@link OnShowCallback} to trigger when the user has indicated that she would like to add one or
+	 *            The {@link OnAnimateCallback} to trigger when the user has indicated that she would like to add one or
 	 *            more list items.
 	 */
-	public AnimateShowAdapter(BaseAdapter baseAdapter, OnShowCallback callback) {
-		super(baseAdapter);
+	public AnimateAdapter(BaseAdapter baseAdapter, OnAnimateCallback callback) {
+		super(baseAdapter, callback);
 		mCallback = callback;
 		animatePositions = new ArrayList<Integer>();
 	}
@@ -74,7 +74,7 @@ public class AnimateShowAdapter<T> extends BaseAdapterDecorator {
 
 			if (getAbsListView() == null) {
 				throw new IllegalStateException(
-						"Call setAbsListView() on this AnimateDismissAdapter before calling setAdapter()!");
+						"Call setAbsListView() on this AnimateShowAdapter before calling setAdapter()!");
 			}
 
 			// if (!views.isEmpty()) {

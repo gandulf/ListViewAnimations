@@ -19,6 +19,7 @@ import android.database.DataSetObserver;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.SectionIndexer;
 
@@ -26,11 +27,10 @@ import com.haarman.listviewanimations.view.DynamicListView;
 import com.haarman.listviewanimations.view.DynamicListView.Swappable;
 
 /**
- * A decorator class that enables decoration of an instance of the BaseAdapter
- * class.
- *
- * Classes extending this class can override methods and provide extra
- * functionality before or after calling the super method.
+ * A decorator class that enables decoration of an instance of the BaseAdapter class.
+ * 
+ * Classes extending this class can override methods and provide extra functionality before or after calling the super
+ * method.
  */
 public abstract class BaseAdapterDecorator extends BaseAdapter implements SectionIndexer, DynamicListView.Swappable {
 
@@ -126,9 +126,10 @@ public abstract class BaseAdapterDecorator extends BaseAdapter implements Sectio
 			mDecoratedBaseAdapter.notifyDataSetChanged();
 		}
 	}
-	
+
 	/**
 	 * Helper function if you want to force notifyDataSetChanged()
+	 * 
 	 * @param force
 	 */
 	public void notifyDataSetChanged(Boolean force) {
@@ -182,6 +183,15 @@ public abstract class BaseAdapterDecorator extends BaseAdapter implements Sectio
 	}
 
 	@Override
+	public boolean isSwapable(AdapterView<?> parent, View view, int pos) {
+		if (mDecoratedBaseAdapter instanceof Swappable) {
+			return ((Swappable) mDecoratedBaseAdapter).isSwapable(parent, view, pos);
+		} else {
+			return false;
+		}
+	}
+
+	@Override
 	public void swapItems(int positionOne, int positionTwo) {
 		if (mDecoratedBaseAdapter instanceof Swappable) {
 			((Swappable) mDecoratedBaseAdapter).swapItems(positionOne, positionTwo);
@@ -189,12 +199,12 @@ public abstract class BaseAdapterDecorator extends BaseAdapter implements Sectio
 	}
 
 	/**
-	 * If the adapter's list-view is hosted inside a parent(/grand-parent/etc) that can scroll horizontally, horizontal swipes won't
-	 * work, because the parent will prevent touch-events from reaching the list-view.
-	 *
-	 * Call this method with the value 'true' to fix this behavior.
-	 * Note that this will prevent the parent from scrolling horizontally when the user touches anywhere in a list-item.
-	 *
+	 * If the adapter's list-view is hosted inside a parent(/grand-parent/etc) that can scroll horizontally, horizontal
+	 * swipes won't work, because the parent will prevent touch-events from reaching the list-view.
+	 * 
+	 * Call this method with the value 'true' to fix this behavior. Note that this will prevent the parent from
+	 * scrolling horizontally when the user touches anywhere in a list-item.
+	 * 
 	 * @param isParentHorizontalScrollContainer
 	 */
 	public void setIsParentHorizontalScrollContainer(boolean isParentHorizontalScrollContainer) {
@@ -210,14 +220,16 @@ public abstract class BaseAdapterDecorator extends BaseAdapter implements Sectio
 	}
 
 	/**
-	 * If the adapter's list-view is hosted inside a parent(/grand-parent/etc) that can scroll horizontally, horizontal swipes won't
-	 * work, because the parent will prevent touch-events from reaching the list-view.
-	 *
-	 * If a list-item view has a child with the given resource-ID, the user can still swipe the list-item by touching that child.
-	 * If the user touches an area outside that child (but inside the list-item view), then the swipe will not happen and the parent
-	 * will do its job instead (scrolling horizontally).
-	 *
-	 * @param childResId The resource-ID of the list-items' child that the user should touch to be able to swipe the list-items.
+	 * If the adapter's list-view is hosted inside a parent(/grand-parent/etc) that can scroll horizontally, horizontal
+	 * swipes won't work, because the parent will prevent touch-events from reaching the list-view.
+	 * 
+	 * If a list-item view has a child with the given resource-ID, the user can still swipe the list-item by touching
+	 * that child. If the user touches an area outside that child (but inside the list-item view), then the swipe will
+	 * not happen and the parent will do its job instead (scrolling horizontally).
+	 * 
+	 * @param childResId
+	 *            The resource-ID of the list-items' child that the user should touch to be able to swipe the
+	 *            list-items.
 	 */
 	public void setTouchChild(int childResId) {
 		mResIdTouchChild = childResId;

@@ -54,7 +54,8 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		bindService(new Intent("com.android.vending.billing.InAppBillingService.BIND"), mServiceConn, Context.BIND_AUTO_CREATE);
+		bindService(new Intent("com.android.vending.billing.InAppBillingService.BIND"), mServiceConn,
+				Context.BIND_AUTO_CREATE);
 	}
 
 	@Override
@@ -111,19 +112,24 @@ public class MainActivity extends Activity {
 		startActivity(intent);
 	}
 
+	public void onMyListClicked(View view) {
+		Intent intent = new Intent(this, MyListActivity.class);
+		startActivity(intent);
+	}
+
 	private IInAppBillingService mService;
 
 	private ServiceConnection mServiceConn = new ServiceConnection() {
 		@Override
 		public void onServiceDisconnected(ComponentName name) {
 			mService = null;
-			//			supportInvalidateOptionsMenu();
+			// supportInvalidateOptionsMenu();
 		}
 
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder service) {
 			mService = IInAppBillingService.Stub.asInterface(service);
-			//			supportInvalidateOptionsMenu();
+			// supportInvalidateOptionsMenu();
 
 			new Thread() {
 
@@ -134,7 +140,8 @@ public class MainActivity extends Activity {
 
 						int response = ownedItems.getInt("RESPONSE_CODE");
 						if (response == 0) {
-							ArrayList<String> purchaseDataList = ownedItems.getStringArrayList("INAPP_PURCHASE_DATA_LIST");
+							ArrayList<String> purchaseDataList = ownedItems
+									.getStringArrayList("INAPP_PURCHASE_DATA_LIST");
 
 							if (purchaseDataList != null) {
 								for (int i = 0; i < purchaseDataList.size(); ++i) {
@@ -189,10 +196,12 @@ public class MainActivity extends Activity {
 
 	private void buy(String sku) {
 		try {
-			Bundle buyIntentBundle = mService.getBuyIntent(3, getPackageName(), sku, "inapp", "bGoa+V7g/ysDXvKwqq+JTFn4uQZbPiQJo4pf9RzJ");
+			Bundle buyIntentBundle = mService.getBuyIntent(3, getPackageName(), sku, "inapp",
+					"bGoa+V7g/ysDXvKwqq+JTFn4uQZbPiQJo4pf9RzJ");
 			PendingIntent pendingIntent = buyIntentBundle.getParcelable("BUY_INTENT");
 			if (pendingIntent != null) {
-				startIntentSenderForResult(pendingIntent.getIntentSender(), 1001, new Intent(), Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0));
+				startIntentSenderForResult(pendingIntent.getIntentSender(), 1001, new Intent(), Integer.valueOf(0),
+						Integer.valueOf(0), Integer.valueOf(0));
 			}
 		} catch (RemoteException e) {
 			e.printStackTrace();

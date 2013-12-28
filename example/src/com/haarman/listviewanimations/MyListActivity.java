@@ -22,10 +22,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class MyListActivity extends BaseActivity {
+import com.haarman.listviewanimations.itemmanipulation.AnimateAdapter;
+import com.haarman.listviewanimations.itemmanipulation.OnAnimateCallback;
+
+public class MyListActivity extends BaseActivity implements OnAnimateCallback {
 
 	private ListView mListView;
 
@@ -34,6 +38,7 @@ public class MyListActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_mylist);
 		mListView = (ListView) findViewById(R.id.activity_mylist_listview);
+		mListView.setAdapter(new AnimateAdapter(createListAdapter(), this));
 		mListView.setDivider(null);
 	}
 
@@ -53,6 +58,16 @@ public class MyListActivity extends BaseActivity {
 		return items;
 	}
 
+	@Override
+	public void onDismiss(AbsListView arg0, int[] arg1) {
+
+	}
+
+	@Override
+	public void onShow(AbsListView arg0, int[] arg1) {
+
+	}
+
 	private static class MyListAdapter extends ArrayAdapter<Integer> {
 
 		private Context mContext;
@@ -68,18 +83,59 @@ public class MyListActivity extends BaseActivity {
 		}
 
 		@Override
+		public int getItemViewType(int position) {
+			return getItem(position) % 2;
+		}
+
+		@Override
+		public int getViewTypeCount() {
+			return 2;
+		}
+
+		@Override
 		public boolean hasStableIds() {
 			return true;
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			TextView tv = (TextView) convertView;
-			if (tv == null) {
-				tv = (TextView) LayoutInflater.from(mContext).inflate(R.layout.list_row, parent, false);
+
+			switch (getItemViewType(position)) {
+			case 0:
+				ViewHolder1 holder1;
+				if (convertView == null) {
+					holder1 = new ViewHolder1();
+					convertView = LayoutInflater.from(mContext).inflate(R.layout.list_row, parent, false);
+					holder1.text = (TextView) convertView;
+					convertView.setTag(holder1);
+				} else {
+					holder1 = (ViewHolder1) convertView.getTag();
+				}
+				holder1.text.setText("This is row number " + getItem(position));
+				break;
+			case 1:
+				ViewHolder2 holder2;
+				if (convertView == null) {
+					holder2 = new ViewHolder2();
+					convertView = LayoutInflater.from(mContext).inflate(R.layout.list_row2, parent, false);
+					holder2.text = (TextView) convertView.findViewById(android.R.id.text1);
+					convertView.setTag(holder2);
+				} else {
+					holder2 = (ViewHolder2) convertView.getTag();
+				}
+				holder2.text.setText("This is row number " + getItem(position));
+				break;
 			}
-			tv.setText("This is row number " + getItem(position));
-			return tv;
+
+			return convertView;
 		}
+	}
+
+	private static class ViewHolder1 {
+		TextView text;
+	}
+
+	private static class ViewHolder2 {
+		TextView text;
 	}
 }

@@ -7,7 +7,7 @@ import android.widget.ListView;
  * The callback interface used by {@link SwipeDismissListViewTouchListener} to inform its client about a successful
  * dismissal of one or more list item positions.
  */
-public interface OnShowCallback {
+public interface OnAnimateCallback extends OnDismissCallback {
 	/**
 	 * Called when the user has indicated they she would like to dismiss one or more list item positions.
 	 * 
