@@ -102,6 +102,7 @@ public class AnimateAdapter<T> extends AnimateDismissAdapter<T> {
 				public void onAnimationEnd(Animator animator) {
 					invokeCallback(Arrays.asList(position));
 				}
+
 			});
 			animatorSet.start();
 

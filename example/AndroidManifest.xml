@@ -5,7 +5,7 @@
 
     <uses-sdk
         android:minSdkVersion="8"
-        android:targetSdkVersion="19" />
+        android:targetSdkVersion="18" />
 
     <uses-permission android:name="com.android.vending.BILLING" />
 
@@ -45,6 +45,9 @@
         <activity
             android:name="com.haarman.listviewanimations.itemmanipulationexamples.ExpandableListItemActivity"
             android:label="@string/expandablelistitemadapter" />
+        <activity
+            android:name="com.haarman.listviewanimations.MyListActivity"
+            android:label="@string/mylistexample" />
     </application>
 
 </manifest>
