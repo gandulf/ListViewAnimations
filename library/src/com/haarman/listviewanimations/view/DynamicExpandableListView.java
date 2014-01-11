@@ -33,6 +33,7 @@ import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ExpandableListView;
 import android.widget.HeaderViewListAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -59,7 +60,7 @@ import com.nineoldandroids.view.ViewHelper;
  * is either above or below the bounds of the ListView, this ListView also scrolls on its own so as to reveal additional
  * content. </p> See http://youtu.be/_BZIvjMgH-Q
  */
-public class DynamicListView extends ListView {
+public class DynamicExpandableListView extends ExpandableListView {
 
 	private final int SMOOTH_SCROLL_AMOUNT_AT_EDGE = 15;
 	private final int MOVE_DURATION = 150;
@@ -102,17 +103,17 @@ public class DynamicListView extends ListView {
 	private OnSwapListener onSwapListener;
 	private OnItemCheckedListener onItemCheckedListener;
 
-	public DynamicListView(Context context) {
+	public DynamicExpandableListView(Context context) {
 		super(context);
 		init(context);
 	}
 
-	public DynamicListView(Context context, AttributeSet attrs, int defStyle) {
+	public DynamicExpandableListView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		init(context);
 	}
 
-	public DynamicListView(Context context, AttributeSet attrs) {
+	public DynamicExpandableListView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		init(context);
 	}
@@ -159,11 +160,10 @@ public class DynamicListView extends ListView {
 
 			ListAdapter adapter = getAdapter();
 
-			boolean swapable = false;
 			if (adapter instanceof Swappable) {
-				swapable = ((Swappable) adapter).isSwapable(parent, view, pos - getHeaderViewsCount());
+				((Swappable) adapter).isSwapable(parent, view, pos - getHeaderViewsCount());
 			}
-			if (mResIdOfDynamicTouchChild == 0 && swapable) {
+			if (mResIdOfDynamicTouchChild == 0) {
 				mDynamicTouchChildTouched = true;
 				makeCellMobile();
 				return true;

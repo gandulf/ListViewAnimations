@@ -8,6 +8,10 @@ buildscript {
 }
 
 apply plugin:'android-library'
+apply plugin:'maven'
+
+group = 'com.haarman.listviewanimations'
+version = '2.5.3'
 
 dependencies {
     compile 'com.android.support:support-v4:19.0.+'
@@ -26,5 +30,11 @@ android {
             res.srcDirs = ['res']
             assets.srcDirs = ['assets']
         }
+    }
+}
+
+uploadArchives {
+    repositories {
+        mavenLocal()
     }
 }
