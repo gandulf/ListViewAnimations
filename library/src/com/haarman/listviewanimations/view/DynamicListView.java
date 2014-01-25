@@ -677,11 +677,32 @@ public class DynamicListView extends ListView {
 		}
 	}
 
+	/**
+	 * Threadsafe clone for backward compatibility as {@link SparseBooleanArray#clone()} is supported first in 4.x APIs
+	 * 
+	 * @param orginal
+	 * @return a clone
+	 */
+	public static SparseBooleanArray clone(final SparseBooleanArray orginal) {
+		if (orginal == null)
+			return null;
+		final SparseBooleanArray clone = new SparseBooleanArray();
+
+		synchronized (orginal) {
+			final int size = orginal.size();
+			for (int i = 0; i < size; i++) {
+				clone.put(i, orginal.get(i));
+			}
+		}
+
+		return clone;
+	}
+
 	@Override
 	public void clearChoices() {
 		SparseBooleanArray checkedPositions = getCheckedItemPositions();
 		if (checkedPositions != null) {
-			checkedPositions = checkedPositions.clone();
+			checkedPositions = clone(checkedPositions);
 		}
 
 		super.clearChoices();
